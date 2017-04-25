@@ -48,3 +48,4 @@ C:\dev\VehicleManager\VehicleManager\VehicleManager.API\obj\Debug\VehicleManager
 C:\dev\VehicleManager\VehicleManager\VehicleManager.API\obj\Debug\VehicleManager.API.pdb
 C:\dev\VehicleManager\VehicleManager\VehicleManager.API\obj\Debug\VehicleManager.API.Migrations.InitialMigration.resources
 C:\dev\VehicleManager\VehicleManager\VehicleManager.API\obj\Debug\VehicleManager.API.csproj.GenerateResource.Cache
+C:\dev\VehicleManager\VehicleManager\VehicleManager.API\bin\Faker.dll

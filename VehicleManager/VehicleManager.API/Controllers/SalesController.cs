@@ -18,9 +18,18 @@ namespace VehicleManager.API.Controllers
         private VehicleManagerDataContext db = new VehicleManagerDataContext();
 
         // GET: api/Sales
-        public IQueryable<Sale> GetSales()
+        public IHttpActionResult GetSales()
         {
-            return db.Sales;
+            var result = db.Sales.Select(s => new
+            {
+               s.SaleId,
+               s.SalePrice,
+               s.InvoiceDate,
+               s.PaymentDate,
+               CustomerName= s.Customer.FirstName+" "+s.Customer.LastName,
+               VehicleName= s.Vehicle.Year+" "+s.Vehicle.Make+" "+s.Vehicle.Model
+            });
+            return Ok(result);
         }
 
         // GET: api/Sales/5
@@ -33,7 +42,15 @@ namespace VehicleManager.API.Controllers
                 return NotFound();
             }
 
-            return Ok(sale);
+            return Ok(new
+            {
+                sale.SaleId,
+                sale.SalePrice,
+                sale.InvoiceDate,
+                sale.PaymentDate,
+                sale.VehicleId,
+                sale.CustomerId
+            });
         }
 
         // PUT: api/Sales/5
@@ -49,8 +66,13 @@ namespace VehicleManager.API.Controllers
             {
                 return BadRequest();
             }
+            var dbSale = db.Sales.Find(id);
+            dbSale.SaleId = sale.SaleId;
+            dbSale.SalePrice = sale.SalePrice;
+            dbSale.InvoiceDate = sale.InvoiceDate;
+            dbSale.PaymentDate = sale.PaymentDate;
 
-            db.Entry(sale).State = EntityState.Modified;
+            db.Entry(dbSale).State = EntityState.Modified;
 
             try
             {
@@ -83,7 +105,15 @@ namespace VehicleManager.API.Controllers
             db.Sales.Add(sale);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = sale.SaleId }, sale);
+            return CreatedAtRoute("DefaultApi", new { id = sale.SaleId }, new
+            {
+                sale.SaleId,
+                sale.SalePrice,
+                sale.InvoiceDate,
+                sale.PaymentDate,
+                sale.VehicleId,
+                sale.CustomerId
+            });
         }
 
         // DELETE: api/Sales/5
@@ -97,9 +127,16 @@ namespace VehicleManager.API.Controllers
             }
 
             db.Sales.Remove(sale);
-            db.SaveChanges();
 
-            return Ok(sale);
+            return Ok(new
+            {
+                sale.SaleId,
+                sale.SalePrice,
+                sale.InvoiceDate,
+                sale.PaymentDate,
+                sale.VehicleId,
+                sale.CustomerId
+            });
         }
 
         protected override void Dispose(bool disposing)
